@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-api
+  labels:
+    app: product-api
+spec:
+  replicas: 3  # Alta disponibilidad: 3 réplicas
+  selector:
+    matchLabels:
+      app: product-api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0  # Zero downtime
+  template:
+    metadata:
+      labels:
+        app: product-api
+        version: v1
+    spec:
+      containers:
+      - name: product-api
+        image: gcr.io/YOUR_PROJECT_ID/product-api:latest
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        
+        # Variables de entorno desde ConfigMap
+        envFrom:
+        - configMapRef:
+            name: product-api-config
+        
+        # Secrets (passwords)
+        env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: product-api-secrets
+              key: db-password
+        - name: API_TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: product-api-secrets
+              key: jwt-secret
+        
+        # Health checks
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        
+        # Resource limits
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-api-service
+  labels:
+    app: product-api
+spec:
+  type: LoadBalancer  # IP pública en GCP
+  selector:
+    app: product-api
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  sessionAffinity: ClientIP  # Sticky sessions
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: product-api-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: product-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: product-api-config
+data:
+  SERVER_PORT: "8080"
+  DB_HOST: "product-api-db-service"
+  DB_PORT: "5432"
+  DB_NAME: "product_api"
+  DB_USERNAME: "apiuser"
