@@ -1,28 +1,42 @@
 package com.example.productapi.model;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.util.Map;
 
+@Entity
+@Table(name = "products")
 public class Product {
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotBlank
+    @Column(nullable = false)
     private String name;
 
+    @Column(length = 500)
     private String imageUrl;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Min(0)
+    @Column(nullable = false)
     private double price;
 
     private double rating;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
     private Map<String, String> specifications;
 
     public Product() {}
 
-    public Product(String id, String name, String imageUrl, String description, double price, double rating, Map<String,String> specifications) {
-        this.id = id;
+    public Product(String name, String imageUrl, String description, double price, double rating, Map<String,String> specifications) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.description = description;
@@ -31,9 +45,8 @@ public class Product {
         this.specifications = specifications;
     }
 
-    // getters and setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

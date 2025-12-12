@@ -1,5 +1,4 @@
 package com.example.productapi;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

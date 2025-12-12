@@ -18,7 +18,7 @@ public class ProductControllerTest {
     @Test
     public void testListReturnsProducts() {
         ProductService svc = mock(ProductService.class);
-        when(svc.listAll()).thenReturn(List.of(new Product("1","A","","",10.0,4.0, Map.of())));
+        when(svc.listAll()).thenReturn(List.of(new Product("A","A","descr",10.0,4.0, Map.of())));
         ProductController ctrl = new ProductController(svc);
 
         List<Product> result = ctrl.list();
@@ -29,10 +29,10 @@ public class ProductControllerTest {
     @Test
     public void testGetNotFound() {
         ProductService svc = mock(ProductService.class);
-        when(svc.getById("x")).thenReturn(Optional.empty());
+        when(svc.getById(1L)).thenReturn(Optional.empty());
         ProductController ctrl = new ProductController(svc);
 
-        ResponseEntity<?> res = ctrl.get("x");
+        ResponseEntity<?> res = ctrl.get(1L);
         assertEquals(404, res.getStatusCodeValue());
     }
 }

@@ -1,0 +1,134 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                 PRODUCT API - GUÍA RÁPIDA DE COMANDOS                     ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 🚀 OPCIÓN 1: SCRIPT AUTOMÁTICO (RECOMENDADO)                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  Compilar + Tests + Empaquetar + Ejecutar:
+  ────────────────────────────────────────────────────────────────────────────
+  .\build-and-run.ps1
+
+  Solo ejecutar (sin compilar):
+  ────────────────────────────────────────────────────────────────────────────
+  .\build-and-run.ps1 -OnlyRun
+
+  Compilar sin tests (más rápido):
+  ────────────────────────────────────────────────────────────────────────────
+  .\build-and-run.ps1 -SkipTests
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 📝 OPCIÓN 2: COMANDOS MANUALES                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  COMPILAR:
+  ────────────────────────────────────────────────────────────────────────────
+  .mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd clean compile
+
+  EJECUTAR TESTS:
+  ────────────────────────────────────────────────────────────────────────────
+  .mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd test
+
+  EMPAQUETAR (SIN TESTS):
+  ────────────────────────────────────────────────────────────────────────────
+  .mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd clean package -DskipTests
+
+  EJECUTAR SERVICIO:
+  ────────────────────────────────────────────────────────────────────────────
+  java -jar target/product-api-0.0.1-SNAPSHOT.jar
+
+  VERIFICAR ESTADO:
+  ────────────────────────────────────────────────────────────────────────────
+  Invoke-WebRequest http://localhost:8080/actuator/health -UseBasicParsing
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 🐛 RESOLVER ERRORES                                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  Ver errores de compilación:
+  ────────────────────────────────────────────────────────────────────────────
+  .mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd clean compile
+
+  Verificar conexión a BD:
+  ────────────────────────────────────────────────────────────────────────────
+  Test-NetConnection -ComputerName localhost -Port 5432
+
+  Limpiar archivos generados:
+  ────────────────────────────────────────────────────────────────────────────
+  .mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd clean
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 🔗 ACCEDER A LA API                                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  Swagger UI:
+  ────────────────────────────────────────────────────────────────────────────
+  http://localhost:8080/swagger-ui.html
+
+  OpenAPI JSON:
+  ────────────────────────────────────────────────────────────────────────────
+  http://localhost:8080/api-docs
+
+  Health Check:
+  ────────────────────────────────────────────────────────────────────────────
+  http://localhost:8080/actuator/health
+
+  Listar Productos:
+  ────────────────────────────────────────────────────────────────────────────
+  http://localhost:8080/api/products
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ⚙️  VARIABLES DE ENTORNO                                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  En PowerShell:
+  ────────────────────────────────────────────────────────────────────────────
+  $env:SERVER_PORT="8080"
+  $env:DB_HOST="localhost"
+  $env:DB_PORT="5432"
+  $env:DB_NAME="product_api"
+  $env:DB_USERNAME="postgres"
+  $env:DB_PASSWORD="MartinDesarrollo28"
+
+  O desde archivo .env:
+  ────────────────────────────────────────────────────────────────────────────
+  Editar .env y ejecutar: .\build-and-run.ps1
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 📚 DOCUMENTACIÓN ADICIONAL                                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  docs/QUICK-START.md       - Guía rápida
+  docs/COMANDOS.md          - Todos los comandos disponibles
+  README.md                 - Documentación general
+  build-and-run.ps1         - Script de automatización
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 💡 CICLO TÍPICO DE DESARROLLO                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  1. Compilar código
+     .mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd clean compile
+
+  2. Ejecutar tests (si hay cambios)
+     .mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd test
+
+  3. Empaquetar JAR
+     .mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd package -DskipTests
+
+  4. Ejecutar servicio
+     java -jar target/product-api-0.0.1-SNAPSHOT.jar
+
+  5. Abrir navegador en http://localhost:8080/swagger-ui.html
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║ ¿Preguntas? Ver: docs/COMANDOS.md o docs/QUICK-START.md                 ║
+╚═══════════════════════════════════════════════════════════════════════════╝
