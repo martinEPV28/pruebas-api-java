@@ -1,0 +1,136 @@
+==========================================
+PRUEBAS DE ENDPOINTS - Product API
+Fecha: 2025-12-12 17:22:43
+==========================================
+
+-------------------------------------------
+TEST 1: POST /api/auth/token - Generar Token JWT
+-------------------------------------------
+✅ ÉXITO: Token JWT generado
+Token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6M...
+Expira: 1765579064
+
+-------------------------------------------
+TEST 2: POST /api/products - Crear Producto 1
+-------------------------------------------
+✅ ÉXITO: Producto 1 creado
+ID: 15
+Nombre: Laptop Dell XPS 15
+Precio: $1599.99
+
+-------------------------------------------
+TEST 3: POST /api/products - Crear Producto 2
+-------------------------------------------
+✅ ÉXITO: Producto 2 creado
+ID: 16
+Nombre: iPhone 15 Pro
+Precio: $999.0
+
+-------------------------------------------
+TEST 4: POST /api/products - Crear Producto 3
+-------------------------------------------
+✅ ÉXITO: Producto 3 creado
+ID: 17
+Nombre: Sony WH-1000XM5
+Precio: $399.99
+
+-------------------------------------------
+TEST 5: GET /api/products - Listar Todos los Productos
+-------------------------------------------
+✅ ÉXITO: Lista de productos obtenida
+Total de productos: 11
+
+  - ID: 1 | Laptop | $899.99 | Rating: 4.7
+  - ID: 2 | Tv | $230000.95 | Rating: 8.0
+  - ID: 7 | Tv 2 | $230000.95 | Rating: 8.0
+  - ID: 8 | Tv 3 | $230000.95 | Rating: 8.0
+  - ID: 10 | AuthTest | $12.34 | Rating: 4.2
+  - ID: 11 | Tv 3 | $230000.95 | Rating: 8.0
+  - ID: 13 | iPhone 15 Pro | $999.0 | Rating: 4.9
+  - ID: 12 | Laptop Dell XPS 15 - ACTUALIZADO | $1499.99 | Rating: 4.9
+  - ID: 15 | Laptop Dell XPS 15 | $1599.99 | Rating: 4.8
+  - ID: 16 | iPhone 15 Pro | $999.0 | Rating: 4.9
+  - ID: 17 | Sony WH-1000XM5 | $399.99 | Rating: 4.7
+
+-------------------------------------------
+TEST 6: GET /api/products/{id} - Obtener Producto por ID
+-------------------------------------------
+✅ ÉXITO: Producto obtenido por ID
+ID: 15
+Nombre: Laptop Dell XPS 15
+Precio: $1599.99
+Rating: 4.8
+Descripción: Laptop profesional de alto rendimiento
+
+-------------------------------------------
+TEST 7: PUT /api/products/{id} - Actualizar Producto
+-------------------------------------------
+✅ ÉXITO: Producto actualizado
+ID: 15
+Nombre actualizado: Laptop Dell XPS 15 - ACTUALIZADO
+Precio actualizado: $1499.99
+Rating actualizado: 4.9
+
+-------------------------------------------
+TEST 8: GET /api/users/username/{username} - Validar Username
+-------------------------------------------
+✅ ÉXITO: Usuario validado
+ID: 1
+Username: admin
+Activo: True
+Creado: 2025-12-12T07:39:47.871311
+
+-------------------------------------------
+TEST 9: DELETE /api/products/{id} - Eliminar Producto
+-------------------------------------------
+✅ ÉXITO: Producto eliminado
+Status: 200
+Mensaje: Product deleted successfully
+
+-------------------------------------------
+TEST 10: GET /api/products - Verificar Lista Después de Eliminar
+-------------------------------------------
+✅ ÉXITO: Lista actualizada obtenida
+Total de productos: 10
+
+  - ID: 1 | Laptop | $899.99
+  - ID: 2 | Tv | $230000.95
+  - ID: 7 | Tv 2 | $230000.95
+  - ID: 8 | Tv 3 | $230000.95
+  - ID: 10 | AuthTest | $12.34
+  - ID: 11 | Tv 3 | $230000.95
+  - ID: 13 | iPhone 15 Pro | $999.0
+  - ID: 12 | Laptop Dell XPS 15 - ACTUALIZADO | $1499.99
+  - ID: 16 | iPhone 15 Pro | $999.0
+  - ID: 15 | Laptop Dell XPS 15 - ACTUALIZADO | $1499.99
+
+-------------------------------------------
+TEST 11: GET /api/products/99999 - Manejo de Error (404)
+-------------------------------------------
+✅ ÉXITO: Error 404 manejado correctamente
+Código HTTP: 404 Not Found
+
+-------------------------------------------
+TEST 12: GET /api/products - Token Inválido (401)
+-------------------------------------------
+✅ ÉXITO: Error 401 manejado correctamente
+Código HTTP: 401 Unauthorized
+
+==========================================
+RESUMEN DE PRUEBAS
+==========================================
+✅ Todos los endpoints fueron probados
+
+Endpoints probados:
+  1. POST /api/auth/token           ✅
+  2. POST /api/products (x3)        ✅
+  3. GET /api/products              ✅
+  4. GET /api/products/{id}         ✅
+  5. PUT /api/products/{id}         ✅
+  6. DELETE /api/products/{id}      ✅
+  7. GET /api/users/username/{user} ✅
+  8. Manejo de errores 404          ✅
+  9. Manejo de errores 401          ✅
+
+Resultados guardados en: test-results-2025-12-12_17-22-43.txt
+==========================================

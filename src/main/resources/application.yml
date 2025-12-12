@@ -1,13 +1,19 @@
 server:
   port: ${SERVER_PORT:8080}
 
+api:
+  auth:
+    username: ${AUTH_USER:admin}
+    password: ${AUTH_PASS:password}
+    secret: ${API_TOKEN_SECRET:a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2}
+
 spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:product_api}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
-  
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -16,6 +22,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    open-in-view: true
   
   h2:
     console:
@@ -23,9 +30,10 @@ spring:
 
 springdoc:
   api-docs:
-    path: /api-docs
+    path: /api-docs/openapi
   swagger-ui:
     path: /swagger-ui.html
+    url: /api-docs/openapi
     enabled: true
     operations-sorter: method
     tags-sorter: alpha
@@ -33,5 +41,16 @@ springdoc:
 
 logging:
   level:
-    root: ${LOG_LEVEL:INFO}
-    com.example.productapi: ${APP_LOG_LEVEL:DEBUG}
+    root: INFO
+    com.example.productapi: DEBUG
+    com.example.productapi.service.AuthService: INFO
+    org.springframework.web.servlet.resource.ResourceHttpRequestHandler: WARN
+    org.springdoc: DEBUG
+    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: DEBUG
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    org.springdoc.webmvc.ui: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+  file:
+    name: logs/app.log
+    path: logs

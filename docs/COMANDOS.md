@@ -29,6 +29,10 @@
 .mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd clean package
 ```
 
+### Ejecutar pruebas globales tests
+```powershell
+powershell -ExecutionPolicy Bypass -File .\test-all-endpoints.ps1
+```powershell
 ## Validar Errores
 
 ### Compilar y mostrar todos los errores

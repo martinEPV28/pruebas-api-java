@@ -120,9 +120,11 @@ java -jar target/product-api-0.0.1-SNAPSHOT.jar
 
 ## 📚 Documentación
 
+- [ARQUITECTURA.md](docs/ARQUITECTURA.md) - 🏗️ Diagramas y arquitectura del sistema
 - [QUICK-START.md](docs/QUICK-START.md) - Guía de inicio rápido
+- [PRUEBAS.md](docs/PRUEBAS.md) - Suite completa de pruebas
+- [ENTREGABLES.md](docs/ENTREGABLES.md) - Checklist de entrega
 - [COMANDOS.md](docs/COMANDOS.md) - Referencia completa de comandos
-- [REFERENCIA-RAPIDA.txt](docs/REFERENCIA-RAPIDA.txt) - Cheat sheet visual
 
 ## 🐛 Troubleshooting
 
