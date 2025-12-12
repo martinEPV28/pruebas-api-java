@@ -2,6 +2,8 @@ package com.example.productapi.controller;
 
 import com.example.productapi.model.Product;
 import com.example.productapi.service.ProductService;
+import com.example.productapi.exception.ResourceNotFoundException;
+import com.example.productapi.exception.SuccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,7 @@ public class ProductController {
     public ResponseEntity<Product> get(@PathVariable Long id) {
         return svc.getById(id)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
     }
 
     @PostMapping
@@ -37,9 +39,22 @@ public class ProductController {
         return ResponseEntity.created(URI.create("/api/products/" + created.getId())).body(created);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> update(@PathVariable Long id, @Validated @RequestBody Product product) {
+        Product updated = svc.update(id, product);
+        return ResponseEntity.ok(updated);
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<SuccessResponse> delete(@PathVariable Long id) {
         svc.delete(id);
-        return ResponseEntity.noContent().build();
+        SuccessResponse response = new SuccessResponse(
+            200,
+            "Product deleted successfully",
+            "SUCCESS",
+            "/api/products/" + id
+        );
+        return ResponseEntity.ok(response);
     }
 }
+
