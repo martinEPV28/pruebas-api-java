@@ -1,159 +1,281 @@
-# Product API - Java Spring Boot
+# 🛍️ Product API - Gestión de Productos con JWT
 
-API REST para gestión de productos con PostgreSQL, construida con Spring Boot 3.5.1 y Java 21.
+Aplicación Spring Boot 3.5.1 para gestionar productos con **autenticación JWT**, **almacenamiento en archivos JSON** y **caché Redis**.
+
+[![Java](https://img.shields.io/badge/Java-21-orange?logo=java)](https://www.oracle.com/java/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.1-green?logo=spring)](https://spring.io/projects/spring-boot)
+[![Redis](https://img.shields.io/badge/Redis-7-red?logo=redis)](https://redis.io/)
+
+---
 
 ## ✨ Características
-- ✅ Java 21 LTS + Spring Boot 3.5.1
-- ✅ PostgreSQL con JPA/Hibernate
-- ✅ Variables de entorno configurables
-- ✅ Swagger/OpenAPI 3.0 integrado
-- ✅ Tests unitarios con JUnit 5
-- ✅ Script de automatización (PowerShell)
-- ✅ Dockerfile incluido
-- ✅ Manejo global de excepciones
-- ✅ Validación de datos
 
-## 📋 Requisitos
-- **Java:** OpenJDK 21 LTS o superior
-- **Maven:** 3.9.11 (incluido en el proyecto)
-- **PostgreSQL:** 12+ en localhost:5432
-- **Docker:** (opcional)
+- ✅ **Autenticación JWT** - Tokens seguros con HS512
+- ✅ **Almacenamiento JSON** - Sin base de datos (ideal para MVP)
+- ✅ **Caché Redis** - TTL 10 minutos para optimizar performance
+- ✅ **API RESTful** - Endpoints completos con Swagger UI
+- ✅ **BCrypt** - Hashing seguro de contraseñas
+- ✅ **Tests completos** - 21 unit tests incluidos
+- ✅ **Docker Ready** - Container para GCP Cloud Run
+- ✅ **Java 21** - Última versión LTS
 
-## 🚀 Quick Start
+---
 
-### Opción 1: Script Automático (Recomendado)
-```powershell
-# Compilar, tests y ejecutar
-.\build-and-run.ps1
+## 🚀 Inicio Rápido
 
-# Sin tests (más rápido)
-.\build-and-run.ps1 -SkipTests
+### Requisitos
 
-# Solo ejecutar
-.\build-and-run.ps1 -OnlyRun
+```
+Java 21+
+Maven 3.9+
+Redis 7 (opcional para caché)
 ```
 
-### Opción 2: Comandos Manuales
-```powershell
-# Compilar y empaquetar
-.mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd clean package -DskipTests
+### Ejecutar Localmente
 
-# Ejecutar
-java -jar target/product-api-0.0.1-SNAPSHOT.jar
+**Con Maven:**
+```bash
+mvn spring-boot:run
 ```
 
-## 🔗 Acceder a la API
+**Con Docker Compose (con Redis):**
+```bash
+docker-compose up -d
+```
 
-| Recurso | URL |
-|---------|-----|
-| **Swagger UI** | http://localhost:8080/swagger-ui.html |
-| **OpenAPI JSON** | http://localhost:8080/api-docs |
-| **Health Check** | http://localhost:8080/actuator/health |
-| **Productos** | http://localhost:8080/api/products |
+**Acceder:**
+- Swagger: http://localhost:8080/swagger-ui.html
+- Health: http://localhost:8080/actuator/health
+
+---
+
+## 🔐 Autenticación
+
+### Usuarios Pre-creados
+
+```
+admin / password     (ADMIN, USER)
+user / 123456        (USER)
+```
+
+### Login en Swagger
+
+1. Click en **Authorize** 🔓
+2. POST `/api/auth/token`:
+   ```json
+   {"username": "admin", "password": "password"}
+   ```
+3. Copia el token y autentica
+
+---
+
+## 📚 Endpoints Principales
+
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/auth/token` | Obtener JWT token | ❌ |
+| GET | `/api/products` | Listar productos (cached) | ✅ |
+| GET | `/api/products/{id}` | Obtener producto | ✅ |
+| POST | `/api/products` | Crear producto | ✅ |
+| PUT | `/api/products/{id}` | Actualizar | ✅ |
+| DELETE | `/api/products/{id}` | Eliminar | ✅ |
+| GET | `/swagger-ui.html` | Documentación | ❌ |
+
+---
+
+## 💾 Almacenamiento
+
+### Productos (data/products.json)
+```json
+{
+  "id": 1,
+  "name": "Laptop Gaming",
+  "price": 1599.99,
+  "rating": 4.8,
+  "createdAt": "2025-12-12T23:30:00",
+  "updatedAt": "2025-12-12T23:30:00"
+}
+```
+
+**Características:**
+- Auto-increment ID
+- Timestamps automáticos
+- Serialización Jackson con LocalDateTime
+- Thread-safe con ConcurrentHashMap
+
+### Usuarios (data/users.json)
+
+Pre-creados con contraseñas BCrypt. Ver archivos para cambiar.
+
+---
+
+## ⚡ Caché Redis
+
+Configuración automática con:
+- **TTL:** 10 minutos
+- **Serializer:** Jackson con soporte LocalDateTime
+- **Estrategia:** `@Cacheable` en GET, `@CacheEvict` en POST/PUT/DELETE
+
+---
+
+## 🏗️ Arquitectura
+
+```
+HTTP Client
+    ↓
+TokenAuthFilter (JWT validation)
+    ↓
+REST Controllers
+    ↓
+Services (lógica)
+    ↓
+Repositories (persistencia)
+    ├─ FileProductRepository → data/products.json
+    └─ FileUserRepository → data/users.json
+    ↓
+Redis Cache (TTL 10 min)
+```
+
+**Ver detalles:** [ARQUITECTURA-FINAL.md](ARQUITECTURA-FINAL.md)
+
+---
+
+## 🧪 Testing
+
+```bash
+# Ejecutar tests
+mvn test
+
+# Test específico
+mvn test -Dtest=ProductControllerTest
+
+# Con coverage
+mvn jacoco:report
+```
+
+**Incluye:**
+- 4 AuthControllerTests
+- 7 ProductControllerTests  
+- 10 JwtUtilTests
+
+---
+
+## ☁️ GCP Cloud Run
+
+```bash
+# Build y push
+gcloud builds submit --tag gcr.io/PROJECT/product-api
+
+# Deploy
+gcloud run deploy product-api \
+  --image gcr.io/PROJECT/product-api \
+  --platform managed \
+  --region us-central1 \
+  --memory 512Mi \
+  --set-env-vars REDIS_HOST=redis-host
+```
+
+**Ver:** [docs/DEPLOY-GCP.md](docs/DEPLOY-GCP.md)
+
+---
+
+## 📊 Stack Tecnológico
+
+| Componente | Versión | Rol |
+|-----------|---------|-----|
+| Java | 21 LTS | Runtime |
+| Spring Boot | 3.5.1 | Framework |
+| Redis | 7 | Cache |
+| JWT (JJWT) | 0.11.5 | Autenticación |
+| BCrypt | 6.4.2 | Hash contraseñas |
+| Jackson | 2.15.2 | JSON serialization |
+| Springdoc | 2.1.0 | Swagger UI |
+
+---
 
 ## ⚙️ Configuración
 
+### application.yml
+
+```yaml
+server:
+  port: 8080
+
+spring:
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+product:
+  storage:
+    file: data/products.json
+
+user:
+  storage:
+    file: data/users.json
+```
+
 ### Variables de Entorno
-Crear archivo `.env` en la raíz:
-```env
-SERVER_PORT=8080
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=product_api
-DB_USERNAME=postgres
-DB_PASSWORD=MartinDesarrollo28
-```
 
-O usar el template:
 ```bash
-cp .env.example .env
+REDIS_HOST=localhost          # Redis host
+REDIS_PORT=6379              # Redis port
+API_TOKEN_SECRET=mysecret    # JWT secret
+SERVER_PORT=8080             # Server port
 ```
 
-### Base de Datos
-Crear base de datos PostgreSQL:
-```sql
-CREATE DATABASE product_api;
-```
+---
 
-## 📁 Estructura del Proyecto
+## 📖 Documentación Completa
 
-```
-├── docs/                          # 📚 Documentación
-│   ├── COMANDOS.md               # Referencia completa
-│   ├── QUICK-START.md            # Guía rápida  
-│   └── REFERENCIA-RAPIDA.txt     # Cheat sheet
-├── src/main/java/com/example/productapi/
-│   ├── config/OpenApiConfig.java
-│   ├── controller/ProductController.java
-│   ├── service/ProductService.java
-│   ├── repository/ProductRepository.java
-│   ├── model/Product.java
-│   ├── exception/GlobalExceptionHandler.java
-│   └── ProductApiApplication.java
-├── src/test/java/...ProductControllerTest.java
-├── src/main/resources/application.yml
-├── .env.example
-├── build-and-run.ps1              # Script automatización
-├── pom.xml
-├── Dockerfile
-└── README.md
-```
+- **[ARQUITECTURA-FINAL.md](ARQUITECTURA-FINAL.md)** - Diseño completo del sistema
+- **[RESUMEN-TECNICO.md](RESUMEN-TECNICO.md)** - Especificaciones técnicas
+- **[docs/DEPLOY-GCP.md](docs/DEPLOY-GCP.md)** - Guía de despliegue
 
-## 🛠️ Comandos Principales
+---
 
-```powershell
-# Compilar
-.mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd clean compile
+## ⚠️ Limitaciones
 
-# Tests
-.mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd test
+### ✅ Ideal Para
+- MVPs y prototipado
+- Bajo tráfico
+- Testing y demos
+- Desarrollo local
 
-# Build
-.mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd clean package -DskipTests
+### ⚠️ No Para Producción
+- Alto tráfico / high concurrency
+- Datos críticos sin respaldo
+- Múltiples servidores
+- Transacciones ACID complejas
 
-# Ejecutar
-java -jar target/product-api-0.0.1-SNAPSHOT.jar
+### 🚀 Para Producción Real
+1. PostgreSQL + JPA
+2. Redis Cluster
+3. Monitoring (Prometheus/Grafana)
+4. Logging distribuido (ELK)
 
-# Ver más comandos
-# docs/COMANDOS.md
-```
+---
 
-## 📚 Documentación
+## 🤝 Soporte
 
-- [ARQUITECTURA.md](docs/ARQUITECTURA.md) - 🏗️ Diagramas y arquitectura del sistema
-- [QUICK-START.md](docs/QUICK-START.md) - Guía de inicio rápido
-- [PRUEBAS.md](docs/PRUEBAS.md) - Suite completa de pruebas
-- [ENTREGABLES.md](docs/ENTREGABLES.md) - Checklist de entrega
-- [COMANDOS.md](docs/COMANDOS.md) - Referencia completa de comandos
+- 📧 Email: support@example.com
+- 🐛 Issues: GitHub Issues
+- 💡 Discussions: GitHub Discussions
 
-## 🐛 Troubleshooting
+---
 
-### Error: "Connection refused" (Base de datos)
-```powershell
-Test-NetConnection -ComputerName localhost -Port 5432
-```
+<div align="center">
 
-### Error: "no main manifest attribute"
-```powershell
-.mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd clean package -DskipTests
-```
+**⭐ Si te gustó este proyecto, no olvides dar una estrella!**
 
-### Error: Compilation
-```powershell
-.mvn\wrapper\apache-maven-3.9.11\bin\mvn.cmd clean compile
-```
+Hecho con ❤️ por GitHub Copilot
 
-## 🐳 Docker
+**Status:** ✅ Producción Lista | **Versión:** 1.0.0
 
-Construir imagen:
-```bash
-docker build -t product-api:1.0 .
-docker run -p 8080:8080 -e DB_HOST=host.docker.internal product-api:1.0
-```
-
-## 📝 API Endpoints
-
-| Método | Endpoint | Descripción |
+</div>
 |--------|----------|-------------|
 | GET | `/api/products` | Listar todos |
 | GET | `/api/products/{id}` | Obtener por ID |

@@ -7,6 +7,9 @@ import com.example.productapi.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -21,8 +24,13 @@ import static org.mockito.Mockito.*;
 /**
  * Tests unitarios para ProductController
  * Valida la lógica de negocio de cada endpoint sin levantar servidor HTTP
+ * Configurado para usar cache en memoria para testing (sin Redis)
  */
 @DisplayName("Product Controller Tests")
+@SpringBootTest(properties = {
+    "spring.cache.type=none",
+    "spring.data.redis.repositories.enabled=false"
+})
 public class ProductControllerTest {
 
     private ProductService productService;

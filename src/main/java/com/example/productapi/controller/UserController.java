@@ -1,7 +1,7 @@
 package com.example.productapi.controller;
 
 import com.example.productapi.model.User;
-import com.example.productapi.repository.UserRepository;
+import com.example.productapi.repository.FileUserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,26 +25,14 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private FileUserRepository fileUserRepository;
 
     @GetMapping
     @Operation(summary = "Listar todos los usuarios", description = "Retorna una lista de todos los usuarios (solo administrador)")
     @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida exitosamente", content = @Content(schema = @Schema(implementation = User.class)))
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userRepository.findAll();
+        List<User> users = fileUserRepository.findAll();
         return ResponseEntity.ok(users);
-    }
-
-    @GetMapping("/{id}")
-    @Operation(summary = "Obtener usuario por ID", description = "Retorna los detalles de un usuario específico")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuario encontrado", content = @Content(schema = @Schema(implementation = User.class))),
-        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
-    })
-    public ResponseEntity<User> getUserById(@Parameter(description = "ID del usuario", required = true) @PathVariable Long id) {
-        return userRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/username/{username}")
@@ -54,7 +42,7 @@ public class UserController {
         @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     })
     public ResponseEntity<User> getUserByUsername(@Parameter(description = "Nombre de usuario a buscar", required = true) @PathVariable String username) {
-        return userRepository.findByUsername(username)
+        return fileUserRepository.findByUsername(username)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

@@ -1,0 +1,95 @@
+[ {
+  "id" : 0,
+  "name" : "Laptop Dell",
+  "imageUrl" : "string",
+  "description" : "string",
+  "price" : 1299.99,
+  "rating" : 4.5,
+  "specifications" : { },
+  "createdAt" : [ 2025, 12, 13, 4, 41, 49, 289000000 ],
+  "updatedAt" : [ 2025, 12, 12, 23, 41, 51, 13158100 ]
+}, {
+  "id" : 1,
+  "name" : "Tv 3",
+  "imageUrl" : "https://example.com/tv.jpg",
+  "description" : "Televison samsug con ueva tegnologia ",
+  "price" : 230000.95,
+  "rating" : 8.0,
+  "specifications" : {
+    "PULGADA" : "45GB",
+    "TEGNOLOGIA" : "4K",
+    "MODELO" : "F5321451"
+  },
+  "createdAt" : [ 2025, 12, 12, 23, 35, 44, 317869700 ],
+  "updatedAt" : [ 2025, 12, 12, 23, 35, 44, 317869700 ]
+}, {
+  "id" : 2,
+  "name" : "Tv 3",
+  "imageUrl" : "https://example.com/tv.jpg",
+  "description" : "Televison samsug con ueva tegnologia ",
+  "price" : 230000.95,
+  "rating" : 8.0,
+  "specifications" : {
+    "PULGADA" : "45GB",
+    "TEGNOLOGIA" : "4K",
+    "MODELO" : "F5321451"
+  },
+  "createdAt" : [ 2025, 12, 12, 23, 43, 5, 6627000 ],
+  "updatedAt" : [ 2025, 12, 12, 23, 43, 5, 6627000 ]
+}, {
+  "id" : 4,
+  "name" : "Tv 4",
+  "imageUrl" : "https://example.com/tv.jpg",
+  "description" : "Televison samsug con ueva tegnologia ",
+  "price" : 230000.95,
+  "rating" : 8.0,
+  "specifications" : {
+    "PULGADA" : "45GB",
+    "TEGNOLOGIA" : "4K",
+    "MODELO" : "F5321451"
+  },
+  "createdAt" : [ 2025, 12, 12, 23, 52, 28, 687865500 ],
+  "updatedAt" : [ 2025, 12, 12, 23, 52, 28, 687865500 ]
+}, {
+  "id" : 5,
+  "name" : "Tv 4",
+  "imageUrl" : "https://example.com/tv.jpg",
+  "description" : "Televison samsug con nueva tegnologia ",
+  "price" : 320.95,
+  "rating" : 5.0,
+  "specifications" : {
+    "PULGADA" : "45GB",
+    "TEGNOLOGIA" : "4K",
+    "MODELO" : "F5321451"
+  },
+  "createdAt" : [ 2025, 12, 12, 23, 53, 7, 596653300 ],
+  "updatedAt" : [ 2025, 12, 12, 23, 53, 7, 596653300 ]
+}, {
+  "id" : 6,
+  "name" : "Laptop Dell",
+  "imageUrl" : "string",
+  "description" : "string",
+  "price" : 1299.99,
+  "rating" : 4.5,
+  "specifications" : {
+    "PULGADA" : "45GB",
+    "TEGNOLOGIA" : "4K",
+    "MODELO" : "F5321451"
+  },
+  "createdAt" : [ 2025, 12, 12, 23, 54, 7, 695203100 ],
+  "updatedAt" : [ 2025, 12, 12, 23, 54, 7, 695203100 ]
+}, {
+  "id" : 7,
+  "name" : "Laptop Dell",
+  "imageUrl" : "string",
+  "description" : "string",
+  "price" : 1299.99,
+  "rating" : 4.5,
+  "specifications" : {
+    "PULGADA" : "45GB",
+    "TEGNOLOGIA" : "4K",
+    "MODELO" : "F5321451"
+  },
+  "createdAt" : [ 2025, 12, 12, 23, 54, 16, 787588400 ],
+  "updatedAt" : [ 2025, 12, 12, 23, 54, 16, 787588400 ]
+} ]

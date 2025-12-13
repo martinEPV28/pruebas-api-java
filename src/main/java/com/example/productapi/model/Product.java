@@ -1,64 +1,40 @@
 package com.example.productapi.model;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import java.io.Serializable;
 import java.util.Map;
 
-@Entity
-@Table(name = "products")
 @Schema(name = "Product", description = "Modelo de producto para comparación de artículos")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Product implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     @Schema(description = "ID único del producto", example = "1")
     private Long id;
 
     @NotBlank
-    @Column(nullable = false)
     @Schema(description = "Nombre del producto", example = "Samsung Galaxy S21", required = true)
     private String name;
 
-    @Column(length = 500)
     @Schema(description = "URL de la imagen del producto", example = "https://example.com/image.jpg")
     private String imageUrl;
 
-    @Column(columnDefinition = "TEXT")
     @Schema(description = "Descripción detallada del producto", example = "Smartphone con pantalla AMOLED de 6.2 pulgadas")
     private String description;
 
     @Min(0)
-    @Column(nullable = false)
     @Schema(description = "Precio del producto", example = "799.99", required = true)
     private double price;
 
     @Schema(description = "Calificación del producto (0-5)", example = "4.5")
     private double rating;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
     @Schema(description = "Especificaciones del producto en formato JSON", example = "{\"RAM\":\"8GB\",\"Storage\":\"256GB\"}")
     private Map<String, String> specifications;
 
-    @Column(name = "created_at", nullable = false)
     private java.time.LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
     private java.time.LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = java.time.LocalDateTime.now();
-        updatedAt = createdAt;
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = java.time.LocalDateTime.now();
-    }
 
     public Product() {}
 
